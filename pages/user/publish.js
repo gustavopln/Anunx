@@ -232,7 +232,8 @@ const Publish = () => {
                     <Typography component="h6" variant="h6" color="textPrimary" gutterBottom>
                         Preço
                     </Typography>
-                    <br />                    
+                    <br />
+                    {/* FormControl para criar um campo com por exemplo o R$, para isso também é preciso o InputAdornment */}
                     <FormControl fullWidth variant="outlined">
                         <InputLabel>Valor</InputLabel>
                         <OutlinedInput 
