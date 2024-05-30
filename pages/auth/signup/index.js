@@ -17,7 +17,7 @@ import {
 import TemplateDefault from '../../../src/templates/Default'
 import { initialValues, validationSchema  } from './formValues'
 import useToasty from '../../../src/contexts/Toasty'
-import useStyles from './syles'
+import useStyles from './styles'
 
 const Signup = () => {
     const classes = useStyles()
