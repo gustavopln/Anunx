@@ -1,6 +1,7 @@
 import { Formik } from 'formik'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { signIn, useSession } from 'next-auth/client' /* passo para ele usuário e senha e ele se encarrega de fazer o restante */
 
 import {
     Box, 
@@ -18,13 +19,23 @@ import TemplateDefault from '../../../src/templates/Default'
 import { initialValues, validationSchema  } from './formValues'
 import useToasty from '../../../src/contexts/Toasty'
 import useStyles from './styles'
+import { Alert } from '@material-ui/lab'
 
 const Signin = () => {
     const classes = useStyles()
     const router = useRouter()
     const { setToasty } = useToasty()
+    const [ session ] = useSession()
+
+    //console.log(session)
 
     const handleFormSubmit = async values => {
+        /* Se fosse o google, seria google no lugar de credentials, quando executar essa função vai no  [...nextauth].js no authorize, que realiza a resquest para o nosso endPoint*/
+        signIn('credentials', { 
+            email: values.email,
+            password: values.password,
+            callbackUrl: 'http://localhost:3000/user/dashboard'
+        })
     }
 
     return (
@@ -53,6 +64,15 @@ const Signin = () => {
                             }) => {
                                 return (
                                     <form onSubmit={handleSubmit}>
+                                        {
+                                            router.query.i === '1'
+                                                ? (
+                                                    <Alert severity="error" className={classes.errorMessage}>
+                                                        Usuário ou senha inválidos
+                                                    </Alert>
+                                                )
+                                                : null
+                                        }
 
                                         <FormControl fullWidth error={errors.email && touched.email} className={classes.formControl}>
                                             <InputLabel className={classes.inputLabel}>Email</InputLabel>

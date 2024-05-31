@@ -37,5 +37,5 @@ const post = async (req, res) => {
 
 export {
     get,
-    post
+    post,
   }
