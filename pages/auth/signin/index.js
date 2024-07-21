@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Formik } from 'formik'
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -21,7 +22,7 @@ import useToasty from '../../../src/contexts/Toasty'
 import useStyles from './styles'
 import { Alert } from '@material-ui/lab'
 
-const Signin = () => {
+const Signin = ({ APP_URL }) => {
     const classes = useStyles()
     const router = useRouter()
     const { setToasty } = useToasty()
@@ -29,12 +30,18 @@ const Signin = () => {
 
     //console.log(session)
 
+    const handleGoogleLogin = () => {
+        signIn('google', {
+            callbackUrl: `${APP_URL}/user/dashboard`
+        })
+    }
+
     const handleFormSubmit = async values => {
         /* Se fosse o google, seria google no lugar de credentials, quando executar essa função vai no  [...nextauth].js no authorize, que realiza a resquest para o nosso endPoint*/
         signIn('credentials', { 
             email: values.email,
             password: values.password,
-            callbackUrl: 'http://localhost:3000/user/dashboard'
+            callbackUrl: `${APP_URL}/user/dashboard`
         })
     }
 
@@ -48,6 +55,29 @@ const Signin = () => {
 
             <Container maxWidth="md">
                 <Box className={classes.box}>
+
+                    <Box display="flex" justifyContent="center">
+                        <Button 
+                            variant="contained"
+                            color="primary"
+                            startIcon={
+                                <Image 
+                                    src="/images/logo_google.svg"
+                                    width={20}
+                                    height={20}
+                                    alt="Login com Google"
+                                />
+                            }
+                            onClick={handleGoogleLogin}
+                        >
+                            Entrar com Google
+                        </Button>                            
+                    </Box>
+
+                    <Box className={classes.orSeparator}>
+                        <span>ou</span>
+                    </Box>
+
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -125,6 +155,12 @@ const Signin = () => {
             </Container>
         </TemplateDefault>
     )
+}
+
+Signin.getInitialProps = async function() {
+    return {
+        APP_URL: process.env.APP_URL
+    }
 }
 
 export default Signin
